@@ -18,4 +18,4 @@ addons:
 cache:
   directories:
   - .autoconf
-  - $HOME/.m2
+  - $HOME/ecobee/.m2
