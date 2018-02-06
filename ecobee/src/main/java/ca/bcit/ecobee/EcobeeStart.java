@@ -17,7 +17,7 @@ public class EcobeeStart {
 		long start = System.nanoTime();
 		clients = read.getDeviceDataFromSourceFile("/Users/Michal/Documents/ecobee/meta_data_v3.csv");
 		long elapsedTime = System.nanoTime() - start;
-		System.out.println("#: " + clients.size() + ", time: " + elapsedTime);
+		System.out.println("#: " + clients.size() + ", time of execution: " + elapsedTime);
 	}
 
 }
