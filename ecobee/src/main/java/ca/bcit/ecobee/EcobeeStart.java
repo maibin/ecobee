@@ -14,7 +14,8 @@ public class EcobeeStart {
 
 	public static void main(String[] args) {
 		read = new ReadEcobeeCSVFileImpl();
-		clients = read.getDeviceDataFromSourceFile("/Users/Michal/Documents/ecobee/meta_data_v3.csv");
+		clients = read.getOnlyEcobeesWithSensors();
+		System.out.println(clients.size());
 	}
 
 }

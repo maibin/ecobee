@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,9 @@ import ca.bcit.ecobee.interfaces.ReadEcobeeCSVFile;
 import ca.bcit.ecobee.models.EcobeeClient;
 
 public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
+
+	private static final String DIR = "/Users/Michal/Documents/ecobee/january";
+	private static final String META = "/Users/Michal/Documents/ecobee/meta_data_v3.csv";
 
 	@Override
 	public List<EcobeeClient> getDeviceDataFromSourceFile(String filename) {
@@ -38,18 +42,30 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 	private Function<String, EcobeeClient> mapToItem = (line) -> {
 		String[] p = line.split(",");// a CSV has comma separated lines
 		EcobeeClient item = new EcobeeClient();
-		item.setId(p[1].trim());
-		item.setModel(p[2].trim());
-		item.setCountryCode(CountryCode.getByCode(p[4].trim()));
 		try {
+			item.setId(p[1].trim());
+			item.setModel(p[2].trim());
+			item.setCountryCode(CountryCode.getByCode(p[4].trim()));
 			item.setFloorArea(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[7].trim()).intValue());
 			item.setAgeOfHome(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[10].trim()).intValue());
+			item.setHeatPump(Boolean.parseBoolean(p[12].trim()));
 			item.setSensors(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[14].trim()).intValue());
-			item.setFilename(p[15].trim().substring(0, p[15].length()-3));
-		} catch (Exception e) {
-			System.out.println("Error");
+			item.setFilename(p[15].trim().substring(0, p[15].length() - 3));
+		} catch (NullPointerException | ParseException e) {
+			item = new EcobeeClient();
 		}
 		return item;
 	};
+
+	@Override
+	public List<EcobeeClient> getOnlyEcobeesWithSensors() {
+		return getDeviceDataFromSourceFile(META).stream()
+				.filter((x) -> x.getId() != null && !x.getHeatPump()
+						&& (x.getModel().equals("ecobee4") || x.getModel().equals("ecobee3")
+								|| x.getModel().equals("ecobee3Lite"))
+						&& x.getSensors() > 1
+						&& new File(DIR, x.getFilename()).exists())
+				.collect(Collectors.toList());
+	}
 
 }
