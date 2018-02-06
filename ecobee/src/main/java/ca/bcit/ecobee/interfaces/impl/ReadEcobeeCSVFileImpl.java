@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -87,12 +88,15 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 	};
 
 	private Function<String, EcobeeDeviceData> mapToDevice = (line) -> {
+		AtomicInteger id = new AtomicInteger();
 		String[] p = line.split(",");// a CSV has comma separated lines
 		EcobeeDeviceData device = new EcobeeDeviceData();
 		try {
+			device.setId(id.incrementAndGet());
 			device.setTime(LocalDateTime.parse(p[0].trim(), DTF));
 			device.setSchedule(p[1].trim());
 			device.setTemperature(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[3].trim()).doubleValue());
+			device.setPreference(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[5].trim()).doubleValue());
 			device.setHumidity(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[6].trim()).intValue());
 			device.setWeather(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[11].trim()).doubleValue());
 			device.setHeatingTime(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[13].trim()).intValue() * 0.75
