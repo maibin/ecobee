@@ -61,7 +61,8 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 			File inputF = new File(DIR + filename);
 			InputStream inputFS = new FileInputStream(inputF);
 			BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
-			inputList = br.lines().skip(1).map(mapToDevice).collect(Collectors.toList());
+			inputList = br.lines().skip(1).map(mapToDevice).filter(device -> device.getId() != null)
+					.collect(Collectors.toList());
 			br.close();
 		} catch (IOException e) {
 			System.out.println("Error");
@@ -101,8 +102,9 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 			device.setWeather(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[11].trim()).doubleValue());
 			device.setHeatingTime(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[13].trim()).intValue() * 0.75
 					+ NumberFormat.getNumberInstance(Locale.CANADA).parse(p[14].trim()).intValue() * 0.25);
-		} catch (NullPointerException | ParseException e1) {
+		} catch (NullPointerException | ParseException | ArrayIndexOutOfBoundsException e1) {
 			device = new EcobeeDeviceData();
+			id.decrementAndGet();
 		}
 		return device;
 	};

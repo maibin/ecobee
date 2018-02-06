@@ -18,7 +18,7 @@ public class EcobeeStart {
 
 	public static void main(String[] args) {
 		read = new ReadEcobeeCSVFileImpl();
-		clients = read.getOnlyEcobeesWithSensors().subList(0, 100);
+		clients = read.getOnlyEcobeesWithSensors();
 		for (EcobeeClient client : clients) {
 			List<EcobeeDeviceData> list = read.getDeviceDataFromFile(client.getFilename());
 			try {
@@ -42,7 +42,7 @@ public class EcobeeStart {
 		}
 		System.out.println("Total time: " + totalTime);
 		System.out.println("Overheated time: " + overHeatedTime);
-		System.out.println("Inefficiency: " + overHeatedTime * 100 / totalTime);
+		System.out.println("Inefficiency: " + overHeatedTime * 100 / totalTime + "%");
 	}
 
 }
