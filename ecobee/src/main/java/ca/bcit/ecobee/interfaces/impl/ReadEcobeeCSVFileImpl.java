@@ -28,6 +28,7 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 	private static final String DIR = "/Users/Michal/Documents/ecobee/january/";
 	private static final String META = "/Users/Michal/Documents/ecobee/meta_data_v3.csv";
 	private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private AtomicInteger id = new AtomicInteger();
 
 	@Override
 	public List<EcobeeClient> getDeviceFileFromMetaFile(String filename) {
@@ -89,7 +90,6 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 	};
 
 	private Function<String, EcobeeDeviceData> mapToDevice = (line) -> {
-		AtomicInteger id = new AtomicInteger();
 		String[] p = line.split(",");// a CSV has comma separated lines
 		EcobeeDeviceData device = new EcobeeDeviceData();
 		try {
@@ -102,7 +102,7 @@ public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
 			device.setWeather(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[11].trim()).doubleValue());
 			device.setHeatingTime(NumberFormat.getNumberInstance(Locale.CANADA).parse(p[13].trim()).intValue() * 0.75
 					+ NumberFormat.getNumberInstance(Locale.CANADA).parse(p[14].trim()).intValue() * 0.25);
-		} catch (NullPointerException | ParseException | ArrayIndexOutOfBoundsException e1) {
+		} catch (Exception e1) {
 			device = new EcobeeDeviceData();
 			id.decrementAndGet();
 		}

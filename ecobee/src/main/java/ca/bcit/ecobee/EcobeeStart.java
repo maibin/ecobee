@@ -14,26 +14,28 @@ public class EcobeeStart {
 	private static List<EcobeeClient> clients = new ArrayList<>();
 	private static boolean first = true;
 	private static boolean overHeated = false;
-	private static int totalTime, overHeatedTime;
+	private static long totalTime, overHeatedTime;
 
 	public static void main(String[] args) {
 		read = new ReadEcobeeCSVFileImpl();
-		clients = read.getOnlyEcobeesWithSensors();
+		clients = read.getOnlyEcobeesWithSensors().subList(0, 5000);
 		for (EcobeeClient client : clients) {
 			List<EcobeeDeviceData> list = read.getDeviceDataFromFile(client.getFilename());
 			try {
+				int i = -1;
 				for (EcobeeDeviceData device : list) {
 					if (overHeated) {
 						overHeatedTime += 5;
 					}
 					if (!first && !device.getSchedule().equals("Sleep")
-							&& device.getTemperature() > list.get(device.getId() - 1).getPreference()) {
+							&& device.getTemperature() > list.get(i).getPreference()) {
 						overHeated = true;
 					} else {
 						first = false;
 						overHeated = false;
 					}
 					totalTime += 5;
+					i++;
 				}
 				first = true;
 			} catch (NullPointerException e) {
