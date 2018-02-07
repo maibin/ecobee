@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 
 import com.neovisionaries.i18n.CountryCode;
 
-import ca.bcit.ecobee.interfaces.ReadEcobeeCSVFile;
+import ca.bcit.ecobee.interfaces.IReadEcobeeCSVFile;
 import ca.bcit.ecobee.models.EcobeeClient;
 import ca.bcit.ecobee.models.EcobeeDeviceData;
 
-public class ReadEcobeeCSVFileImpl implements ReadEcobeeCSVFile {
+public class ReadEcobeeCSVFileImpl implements IReadEcobeeCSVFile {
 
 	private static final String DIR = "/Users/Michal/Documents/ecobee/january/";
 	private static final String META = "/Users/Michal/Documents/ecobee/meta_data_v3.csv";

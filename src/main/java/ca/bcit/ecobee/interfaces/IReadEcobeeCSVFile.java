@@ -5,7 +5,7 @@ import java.util.List;
 import ca.bcit.ecobee.models.EcobeeClient;
 import ca.bcit.ecobee.models.EcobeeDeviceData;
 
-public interface ReadEcobeeCSVFile {
+public interface IReadEcobeeCSVFile {
 	
 	List<EcobeeClient> getDeviceFileFromMetaFile(String filename);
 	
