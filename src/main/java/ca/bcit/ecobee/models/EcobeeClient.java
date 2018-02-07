@@ -12,6 +12,7 @@ public class EcobeeClient {
 	private CountryCode countryCode;
 	private Integer floorArea;
 	private Integer ageOfHome;
+	private Boolean heatPump;
 	private Integer sensors;
 	private String filename;
 }
