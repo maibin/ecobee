@@ -10,7 +10,7 @@ import ca.bcit.ecobee.models.EcobeeClient;
 import ca.bcit.ecobee.models.EcobeeDeviceData;
 import ca.bcit.ecobee.models.Result;
 
-public class EcobeeStandard implements IAlgorithm {
+public class EcobeeAlgorithm implements IAlgorithm {
 
 	private List<Result> results = new ArrayList<>();
 	private IReadEcobeeCSVFile read = new ReadEcobeeCSVFileImpl();
@@ -18,7 +18,7 @@ public class EcobeeStandard implements IAlgorithm {
 	private boolean first = true;
 
 	@Override
-	public List<Result> heat(List<EcobeeClient> clients) {
+	public List<Result> simulate(List<EcobeeClient> clients) {
 		for (EcobeeClient client : clients) {
 			List<EcobeeDeviceData> scenario = read.getDeviceDataFromFile(client.getFilename());
 			try {

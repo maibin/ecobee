@@ -7,6 +7,6 @@ import ca.bcit.ecobee.models.Result;
 
 public interface IAlgorithm {
 	
-	List<Result> heat(List<EcobeeClient> clients);
-
+	List<Result> simulate(List<EcobeeClient> clients);
+	
 }
