@@ -25,6 +25,7 @@ public class EcobeeAlgorithm implements IAlgorithm {
 				int i = -1;
 				Result result = new Result();
 				for (EcobeeDeviceData device : scenario) {
+					result.setHeatingTime(result.getHeatingTime() + device.getHeatingTime());
 					if (overHeated) {
 						result.setOverHeatedTime(result.getOverHeatedTime() + 5);
 					}
